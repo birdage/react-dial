@@ -69,6 +69,8 @@ var Dial = function (_Component) {
         display: 'flex' // allow for textbox to be easily centered
       };
 
+      var className = this.props.className ? this.props.className : "";
+
       var canvasStyles = {
         position: 'absolute' // remove canvas from "flow" so input can be centered
       };
@@ -88,7 +90,7 @@ var Dial = function (_Component) {
 
       return _react2.default.createElement(
         'div',
-        { style: divStyles, onKeyDown: this.handleKeyDown },
+        { style: divStyles, onKeyDown: this.handleKeyDown, className: className },
         _react2.default.createElement('canvas', { style: canvasStyles, width: this.props.width, height: this.props.width, ref: 'canvas' }),
         _react2.default.createElement('input', { style: inputStyles, value: this.props.value, onChange: this.handleChange, readOnly: this.props.readOnly })
       );
