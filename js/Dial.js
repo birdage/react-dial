@@ -57,7 +57,6 @@ var Dial = function (_Component) {
 
     // return the dom structure
     value: function render() {
-
       // "smart defaults"
       var fontSize = this.props.fontSize || this.props.width * 0.3;
       var textColor = this.props.textColor || this.props.fgColor || "#0fb6ff";
@@ -92,7 +91,7 @@ var Dial = function (_Component) {
         'div',
         { style: divStyles, onKeyDown: this.handleKeyDown, className: className },
         _react2.default.createElement('canvas', { style: canvasStyles, width: this.props.width, height: this.props.width, ref: 'canvas' }),
-        _react2.default.createElement('input', { style: inputStyles, value: this.props.value, onChange: this.handleChange, readOnly: this.props.readOnly })
+        _react2.default.createElement('input', { "data-cursor": this.props.cursor.toString() ,style: inputStyles, value: this.props.value, onChange: this.handleChange, readOnly: this.props.readOnly })
       );
     }
   }, {
@@ -133,9 +132,11 @@ var Dial = function (_Component) {
       var value = unUnits(this.props.value) - this.props.min; // normalized current value
       var fillFraction = value / scale;
 
-      var startAngle = radians(offset);
-      var endAngle = radians(offset + arc);
-      var readingAngle = radians(offset + arc * fillFraction);
+      var bstartAngle, bendAngle, breadingAngle
+      var startAngle, endAngle, readingAngle
+      bstartAngle = radians(offset);
+      bendAngle = radians(offset + arc);
+      breadingAngle = radians(offset + arc * fillFraction);
 
       // canvas settings
       canvas.lineWidth = lineWidth;
@@ -148,13 +149,27 @@ var Dial = function (_Component) {
       if (this.props.bgColor !== "none") {
         canvas.beginPath();
         canvas.strokeStyle = this.props.bgColor;
-        canvas.arc(centerxy, centerxy, radius, startAngle, endAngle, anticlockwise);
+        canvas.arc(centerxy, centerxy, radius, bstartAngle, bendAngle, anticlockwise);
         canvas.stroke();
       }
 
       canvas.beginPath();
       canvas.strokeStyle = this.props.fgColor;
-      canvas.arc(centerxy, centerxy, radius, startAngle, readingAngle, anticlockwise);
+
+      if (!this.props.cursor){
+        startAngle = radians(offset);
+        endAngle = radians(offset + arc * fillFraction);
+      }else{
+        var dWidth = 5;
+        var val = parseFloat(this.props.value);
+        var st = (offset + val) - dWidth;
+        var ed = (offset + val) + dWidth;
+
+        startAngle = radians(st);
+        endAngle = radians(ed);
+      }
+
+      canvas.arc(centerxy, centerxy, radius, startAngle, endAngle, anticlockwise);
       canvas.stroke();
     }
   }]);
@@ -170,6 +185,7 @@ Dial.propTypes = (_Dial$propTypes = {
   angleArc: _propTypes2.default.number,
   readOnly: _propTypes2.default.bool,
   rotation: _propTypes2.default.string,
+  cursor: _propTypes2.default.bool,
   thickness: _propTypes2.default.number,
   lineCap: _propTypes2.default.string,
   width: _propTypes2.default.number,
@@ -188,6 +204,7 @@ Dial.defaultProps = (_Dial$defaultProps = {
   angleArc: 360,
   readOnly: false,
   rotation: 'clockwise',
+  cursor: false,
   thickness: 1,
   lineCap: 'butt',
   width: 200,

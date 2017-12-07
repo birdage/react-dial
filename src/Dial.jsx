@@ -9,6 +9,7 @@ class Dial extends Component {
     angleOffset: pt.number,
     angleArc: pt.number,
     readOnly: pt.bool,
+    cursor: pt.bool,
     rotation: pt.string,
     thickness: pt.number,
     lineCap: pt.string,
@@ -28,6 +29,7 @@ class Dial extends Component {
     min: 0,
     max: 100,
     value: 0,
+    cursor: false,
     angleOffset: 0,
     angleArc: 360,
     readOnly: false,
@@ -80,7 +82,7 @@ class Dial extends Component {
     return (
       <div style={divStyles} onKeyDown={this.handleKeyDown}>
         <canvas style={canvasStyles} width={this.props.width} height={this.props.width} ref="canvas"/>
-        <input style={inputStyles} value={this.props.value} onChange={this.handleChange} readOnly={this.props.readOnly}/>
+        <input data-cursor={this.props.cursor} style={inputStyles} value={this.props.value} onChange={this.handleChange} readOnly={this.props.readOnly}/>
       </div>
     )
   }
